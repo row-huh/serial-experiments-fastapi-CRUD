@@ -71,7 +71,7 @@ def add_task( title:str ):
 
 # put tasks 
 @app.put("/tasks/{task_id}")
-def update_task(task_id: int, updated: dict):
+def update_task(task_id: int, title: str = None, completed: bool = None):
     """
     Update an existing task
     """
@@ -80,19 +80,19 @@ def update_task(task_id: int, updated: dict):
     if task is None:
         raise HTTPException(status_code=404, detail="Task not found")
 
-    if updated.title is None and updated.completed is None:
+    if title is None and completed is None:
         raise HTTPException(
             status_code=400,
             detail="Request body must contain title or completed"
         )
 
-    if updated.title is not None:
-        if not updated.title.strip():
+    if title is not None:
+        if not title.strip():
             raise HTTPException(status_code=400, detail="Title cannot be empty")
-        task["title"] = updated.title
+        task["title"] = title
 
-    if updated.completed is not None:
-        task["completed"] = updated.completed
+    if completed is not None:
+        task["completed"] = completed
 
     return task
 
