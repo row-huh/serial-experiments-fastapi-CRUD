@@ -97,3 +97,15 @@ def update_task(task_id: int, updated: dict):
     return task
 
 
+@app.delete("/tasks/{task_id}")
+def delete_task(task_id: int):
+    """
+    Delete an existing task 
+    """
+    task = next((t for t in tasks if t["id"] == task_id), None)
+
+    if task is None:
+        raise HTTPException(status_code=404, detail="Task not found")
+
+    tasks.remove(task)
+    return {"message": "Task deleted successfully"}
